@@ -8,7 +8,7 @@ const fs = require('fs');
 
 const HLT = 0b00000001; // Halt CPU
 // !!! IMPLEMENT ME
-// LDI
+const LDI = 0b10011001;
 // MUL
 // PRN
 
@@ -39,9 +39,9 @@ class CPU {
 
     bt[HLT] = this.HLT;
     // !!! IMPLEMENT ME
-    // LDI
-    // MUL
-    // PRN
+    bt[LDI] = this.LDI;
+    // bt[MUL] = this.MUL;
+    // bt[PRN] = this.PRN;
 
     this.branchTable = bt;
   }
@@ -93,7 +93,7 @@ class CPU {
     this.reg.IR = this.ram.read(this.reg.PC);
 
     // Debugging output
-    //console.log(`${this.reg.PC}: ${this.reg.IR.toString(2)}`);
+    console.log(`${this.reg.PC}: ${this.reg.IR.toString(2)}`);
 
     // Based on the value in the Instruction Register, locate the
     // appropriate hander in the branchTable
@@ -105,7 +105,8 @@ class CPU {
     // !!! IMPLEMENT ME
     if (handler === undefined) {
       console.log(`ERROR: Unknown Instruction ${this.reg.IR.toString(2)}`);
-      this.stop();
+      console.log('Instruction undefined: ', handler);
+      this.HLT();
       return;
     }
 
@@ -114,8 +115,10 @@ class CPU {
 
     // We need to use call() so we can set the "this" value inside
     // the handler (otherwise it will be undefined in the handler)
-    handler.call(this, operandA, operandB);
-
+    handler(operandA, operandB);
+    let bitMask = ((this.reg.IR >> 6) & 3) + 1;
+    this.reg.PC + bitMask;
+    console.log(bitMask);
     // Increment the PC register to go to the next instruction
     // !!! IMPLEMENT ME
     this.reg.PC++;
@@ -128,13 +131,15 @@ class CPU {
    */
   HLT() {
     // !!! IMPLEMENT ME
+    this.stopClock();
   }
 
   /**
    * LDI R,I
    */
-  LDI() {
+  LDI(reg, value) {
     // !!! IMPLEMENT ME
+    this.reg[reg] = value;
   }
 
   /**
@@ -149,6 +154,7 @@ class CPU {
    */
   PRN() {
     // !!! IMPLEMENT ME
+    console.log(this.reg[0]);
   }
 }
 

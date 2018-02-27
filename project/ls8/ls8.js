@@ -33,10 +33,10 @@ function processFile(content, cpu, onComplete) {
     // Convert from binary string to numeric value
     const binaryValue = parseInt(line, 2);
 
-    if (isNaN(binaryValue)) {
-      console.error('Invaid binary number: ' + line);
-      process.exit(1);
-    }
+    // if (isNaN(binaryValue)) {
+    //   console.error('Invaid binary number: ' + line);
+    //   process.exit(1);
+    // }
     // Store in the CPU with the .poke() function
     cpu.poke(curAddr, binaryValue);
     // And on to the next one
