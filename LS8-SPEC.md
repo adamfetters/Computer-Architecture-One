@@ -69,7 +69,7 @@ Memory map:
 
 ## Stack
 
-The SP points at the value at the top of the stack, or at address `F3`
+The SP points at the value at the top of the stack, or at address `F4`
 if the stack is empty.
 
 
@@ -116,10 +116,10 @@ See `IRET`, below, for returning from an interrupt.
 
 Meanings of the bits in the first byte of each instruction: `AABCCDDD`
 
-`AA` Number of operands for this opcode, 0-2
-`B` 1 if this is an ALU operation
-`CC` Category, 0-3
-`DDD` Instruction, 0-7
+* `AA` Number of operands for this opcode, 0-2
+* `B` 1 if this is an ALU operation
+* `CC` Category, 0-3
+* `DDD` Instruction, 0-7
 
 The number of operands `AA` is useful to know because the total number of bytes in any
 instruction is the number of operands + 1 (for the opcode). This
@@ -187,10 +187,10 @@ Compare the value in two registers.
 
 * If they are equal, set the Equal `E` flag to 1, otherwise set it to 0.
 
-* If registerA is less than registerB, set the Less-than `T` flag to 1,
+* If registerA is less than registerB, set the Less-than `L` flag to 1,
   otherwise set it to 0.
 
-* If registerA is greater than registerB, set the Greater-than `T` flag
+* If registerA is greater than registerB, set the Greater-than `G` flag
   to 1, otherwise set it to 0.
 
 Machine code:
