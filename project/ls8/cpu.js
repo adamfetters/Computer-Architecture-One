@@ -122,8 +122,8 @@ class CPU {
       return;
     }
 
-    let operandA = this.ram.read((this.reg.PC + 1) & 255);
-    let operandB = this.ram.read((this.reg.PC + 2) & 255);
+    let operandA = this.ram.read(this.reg.PC + 1);
+    let operandB = this.ram.read(this.reg.PC + 2);
 
     // We need to use call() so we can set the "this" value inside
     // the handler (otherwise it will be undefined in the handler)
