@@ -105,6 +105,10 @@ class CPU {
     }
   }
 
+  getFlag(flag) {
+    return (this.reg.FL & (1 << flag)) >> flag;
+  }
+
   /**
    * ALU functionality
    *
@@ -196,9 +200,22 @@ class CPU {
     this.stopClock();
   }
 
+  // JMP if Equal
+  JEQ(reg) {
+    if (this.getFlag(FLAG_EQ)) {
+      return this.reg[reg];
+    }
+  }
+
   // JMP function
   JMP(reg) {
     return this.reg[reg];
+  }
+
+  JNE(reg) {
+    if (!this.getFlag(FLAG_EQ)) {
+      return this.reg[reg];
+    }
   }
 
   /**
