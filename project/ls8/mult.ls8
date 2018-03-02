@@ -12,7 +12,4 @@
 01000011 # PRN R0    Print value in R0
 00000000
 00000001 # HLT       Halt
-<<<<<<< HEAD
-=======
 
->>>>>>> 1543b4f2433f0507e93c68ac6b45820d8f6fdf58

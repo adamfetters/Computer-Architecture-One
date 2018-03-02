@@ -12,6 +12,14 @@ const LDI = 0b10011001;
 const MUL = 0b10101010;
 const PRN = 0b01000011;
 const ADD = 0b10101000;
+const PUSH = 0b01001101;
+const POP = 0b01001100;
+const CMP = 0b10100000;
+const JMP = 0b01010000;
+const JEQ = 0b01010001;
+const JNE = 0b01010010;
+
+const SP = 7;
 /**
  * Class for simulating a simple Computer (CPU & memory)
  */
@@ -27,9 +35,15 @@ class CPU {
     // Special-purpose registers
     this.reg.PC = 0; // Program Counter
     this.reg.IR = 0; // Instruction Register
+    this.reg.FL = 0;
 
     // Init the stack pointer
-    // this.reg[SP] = 0xf3;
+    this.reg[SP] = 0xf3;
+
+    // Flag values for FL register
+    const FLAG_EQ = 0;
+    const FLAG_GT = 1;
+    const FLAG_LT = 2;
 
     this.setupBranchTable();
   }
@@ -46,6 +60,12 @@ class CPU {
     bt[MUL] = this.MUL;
     bt[PRN] = this.PRN;
     bt[ADD] = this.ADD;
+    bt[PUSH] = this.PUSH;
+    bt[POP] = this.POP;
+    bt[CMP] = this.CMP;
+    bt[JMP] = this.JMP;
+    bt[JEQ] = this.JEQ;
+    bt[JNE] = this.JNE;
 
     this.branchTable = bt;
   }
@@ -75,6 +95,16 @@ class CPU {
     clearInterval(this.clock);
   }
 
+  setFlag(flag, value) {
+    if (value === true) {
+      //set flag to 1
+      this.reg.FL =| (1 << f);
+    } else {
+      // Set flag to 0
+      this.reg.FL &= ~(1 << f);
+    }
+  }
+
   /**
    * ALU functionality
    *
@@ -93,6 +123,10 @@ class CPU {
 
       case 'ADD':
         this.reg[regA] = this.reg[regA] + this.reg[regB];
+        break;
+
+      case 'CMP':
+        this.reg.FL = setFlag(FLAG_EQ, this.reg[regA] === this.reg[regB]);
     }
   }
 
@@ -146,12 +180,22 @@ class CPU {
     this.alu('AND', regA, regB);
   }
 
+  // Compare function
+  CMP(regA, regB) {
+    this.alu('CMP', regA, regB);
+  }
+
   /**
    * HLT
    */
   HLT() {
     // !!! IMPLEMENT ME
     this.stopClock();
+  }
+
+  // JMP function
+  JMP(reg) {
+    return this.reg[reg];
   }
 
   /**
@@ -184,6 +228,13 @@ class CPU {
 
     this.ram.write(this.reg[SP], value);
   }
+
+  pushHelper(value) {
+    this.reg[SP]--;
+    this.ram.write(this.reg[SP], value);
+  }
+
+  //   popHelper()
 }
 
 module.exports = CPU;
