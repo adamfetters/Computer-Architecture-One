@@ -110,7 +110,7 @@ class CPU {
   }
 
   getFlag(flag) {
-    return (this.reg.FL & (1 << flag)) >> flag;
+    return (this.reg.FL & 1) === flag;
   }
 
   /**
@@ -172,13 +172,17 @@ class CPU {
 
     // We need to use call() so we can set the "this" value inside
     // the handler (otherwise it will be undefined in the handler)
-    handler.call(this, operandA, operandB);
+    const newPC = handler.call(this, operandA, operandB);
 
     let bitMask = (this.reg.IR >> 6) & 0b00000011;
 
     // Increment the PC register to go to the next instruction
     // !!! IMPLEMENT ME
-    this.reg.PC = this.reg.PC + bitMask + 1;
+    if (newPC === undefined) {
+      this.reg.PC = this.reg.PC + bitMask + 1;
+    } else {
+      this.reg.PC = newPC;
+    }
   }
 
   // INSTRUCTION HANDLER CODE:
