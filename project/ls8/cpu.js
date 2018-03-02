@@ -20,6 +20,11 @@ const JEQ = 0b01010001;
 const JNE = 0b01010010;
 
 const SP = 7;
+
+// Flag values for FL register
+const FLAG_EQ = 1;
+const FLAG_GT = 2;
+const FLAG_LT = 4;
 /**
  * Class for simulating a simple Computer (CPU & memory)
  */
@@ -39,11 +44,6 @@ class CPU {
 
     // Init the stack pointer
     this.reg[SP] = 0xf3;
-
-    // Flag values for FL register
-    const FLAG_EQ = 1;
-    const FLAG_GT = 2;
-    const FLAG_LT = 4;
 
     this.setupBranchTable();
   }
@@ -130,9 +130,9 @@ class CPU {
         break;
 
       case 'CMP':
-        this.reg.FL = setFlag(FLAG_EQ, this.reg[regA] === this.reg[regB]);
-        this.reg.FL = setFlag(FLAG_GT, this.reg[regA] > this.reg[regB]);
-        this.reg.FL = setFlag(FLAG_LT, this.reg[regA] < this.reg[regB]);
+        this.reg.FL = this.setFlag(FLAG_EQ, this.reg[regA] === this.reg[regB]);
+        this.reg.FL = this.setFlag(FLAG_GT, this.reg[regA] > this.reg[regB]);
+        this.reg.FL = this.setFlag(FLAG_LT, this.reg[regA] < this.reg[regB]);
         break;
     }
   }
