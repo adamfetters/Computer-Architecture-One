@@ -14,6 +14,8 @@ const PRN = 0b01000011;
 const ADD = 0b10101000;
 const PUSH = 0b01001101;
 const POP = 0b01001100;
+const CALL = 0b00001111;
+const RET = 0b00010000;
 const CMP = 0b10100000;
 const JMP = 0b01010000;
 const JEQ = 0b01010001;
@@ -62,6 +64,8 @@ class CPU {
     bt[ADD] = this.ADD;
     bt[PUSH] = this.PUSH;
     bt[POP] = this.POP;
+    bt[CALL] = this.call;
+    bt[RET] = this.return;
     bt[CMP] = this.CMP;
     bt[JMP] = this.JMP;
     bt[JEQ] = this.JEQ;
@@ -106,7 +110,7 @@ class CPU {
   }
 
   getFlag(flag) {
-    return (this.reg.FL & (1 << flag)) >> flag;
+    return;
   }
 
   /**
@@ -187,6 +191,15 @@ class CPU {
     this.alu('AND', regA, regB);
   }
 
+  // Call function
+  CALL() {
+    this.reg[SP]--;
+    this.ram.write(this.reg[SP], this.reg.PC + 2);
+
+    const regA = this.ram.read(this.reg.PC + 1);
+    this.reg.PC = this.reg[regA];
+  }
+
   // Compare function
   CMP(regA, regB) {
     this.alu('CMP', regA, regB);
@@ -247,6 +260,11 @@ class CPU {
     this.reg[SP] = this.reg[SP] - 1;
 
     this.ram.write(this.reg[SP], value);
+  }
+
+  RET() {
+    this.reg.PC = this.ram.read(this.reg[SP]);
+    this.reg[SP]++;
   }
 
   pushHelper(value) {
