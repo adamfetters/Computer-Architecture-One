@@ -110,7 +110,7 @@ class CPU {
   }
 
   getFlag(flag) {
-    return;
+    return (this.reg.FL & (1 << flag)) >> flag;
   }
 
   /**
@@ -134,9 +134,9 @@ class CPU {
         break;
 
       case 'CMP':
-        this.reg.FL = this.setFlag(FLAG_EQ, this.reg[regA] === this.reg[regB]);
-        this.reg.FL = this.setFlag(FLAG_GT, this.reg[regA] > this.reg[regB]);
-        this.reg.FL = this.setFlag(FLAG_LT, this.reg[regA] < this.reg[regB]);
+        this.setFlag(FLAG_EQ, this.reg[regA] === this.reg[regB]);
+        this.setFlag(FLAG_GT, this.reg[regA] > this.reg[regB]);
+        this.setFlag(FLAG_LT, this.reg[regA] < this.reg[regB]);
         break;
     }
   }
