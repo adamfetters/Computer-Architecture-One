@@ -98,10 +98,10 @@ class CPU {
   setFlag(flag, value) {
     if (value === true) {
       //set flag to 1
-      this.reg.FL =| (1 << f);
+      this.reg.FL = this.reg.FL | flag;
     } else {
       // Set flag to 0
-      this.reg.FL &= ~(1 << f);
+      this.reg.FL = this.reg.FL & ~flag;
     }
   }
 
