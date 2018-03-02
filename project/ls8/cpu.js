@@ -110,7 +110,7 @@ class CPU {
   }
 
   getFlag(flag) {
-    return (this.reg.FL & 1) === flag;
+    return (this.reg.FL & flag) === flag;
   }
 
   /**
@@ -271,10 +271,10 @@ class CPU {
     this.reg[SP]++;
   }
 
-  pushHelper(value) {
-    this.reg[SP]--;
-    this.ram.write(this.reg[SP], value);
-  }
+  // pushHelper(value) {
+  //   this.reg[SP]--;
+  //   this.ram.write(this.reg[SP], value);
+  // }
 
   //   popHelper()
 }
