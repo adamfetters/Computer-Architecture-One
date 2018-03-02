@@ -41,9 +41,9 @@ class CPU {
     this.reg[SP] = 0xf3;
 
     // Flag values for FL register
-    const FLAG_EQ = 0;
-    const FLAG_GT = 1;
-    const FLAG_LT = 2;
+    const FLAG_EQ = 1;
+    const FLAG_GT = 2;
+    const FLAG_LT = 4;
 
     this.setupBranchTable();
   }
@@ -127,6 +127,9 @@ class CPU {
 
       case 'CMP':
         this.reg.FL = setFlag(FLAG_EQ, this.reg[regA] === this.reg[regB]);
+        this.reg.FL = setFlag(FLAG_GT, this.reg[regA] > this.reg[regB]);
+        this.reg.FL = setFlag(FLAG_LT, this.reg[regA] < this.reg[regB]);
+        break;
     }
   }
 
